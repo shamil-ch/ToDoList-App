@@ -2,15 +2,19 @@ import React, { useEffect, useState } from "react";
 import ToDoList from "./components/todolist";
 import { fetchTasks, updateTask, deleteTask } from "./Api";
 import "./App.css";
-
+import { Waveform } from "@uiball/loaders";
 const App = () => {
   const [tasks, setTasks] = useState([]);
   const [newTaskTitle, setNewTaskTitle] = useState("");
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     const getTasks = async () => {
+      setLoading(true);
       const fetchedTasks = await fetchTasks();
       setTasks(fetchedTasks);
+      setLoading(false);
     };
 
     const storedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
@@ -29,36 +33,69 @@ const App = () => {
   const handleAddTask = async () => {
     if (!newTaskTitle) return;
 
+    setLoading(true);
     const newTask = {
       id: tasks.length + 1,
       title: newTaskTitle,
       completed: false,
     };
-    setTasks((prevTasks) => [newTask, ...prevTasks]);
-    setNewTaskTitle("");
-    console.log(newTask);
-    const allTasks = [newTask, ...tasks];
-    storeTasksToLocalStorage(allTasks);
-  };
+    
+    try {
+      // Simulating an asynchronous task (replace with actual API call)
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
+      setTasks((prevTasks) => [newTask, ...prevTasks]);
+      setNewTaskTitle("");
+
+      const allTasks = [newTask, ...tasks];
+      storeTasksToLocalStorage(allTasks);
+    } catch (error) {
+      console.error("Error adding task:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleTaskComplete = async (id) => {
+    setLoading(true);
     const taskToUpdate = tasks.find((task) => task.id === id);
 
     if (taskToUpdate) {
       const updatedTasks = tasks.map((task) =>
         task.id === id ? { ...task, completed: !task.completed } : task
       );
-      setTasks(updatedTasks);
-      await updateTask(id, !taskToUpdate.completed);
-      storeTasksToLocalStorage(updatedTasks);
+
+      try {
+        // Simulating an asynchronous task (replace with actual API call)
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        setTasks(updatedTasks);
+        await updateTask(id, !taskToUpdate.completed);
+        storeTasksToLocalStorage(updatedTasks);
+      } catch (error) {
+        console.error("Error updating task:", error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
+
   const handleDeleteTask = async (id) => {
-    const isDeleted = await deleteTask(id);
-    if (isDeleted) {
-      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
-      storeTasksToLocalStorage(tasks.filter((task) => task.id !== id));
+    setLoading(true);
+
+    try {
+      // Simulating an asynchronous task (replace with actual API call)
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const isDeleted = await deleteTask(id);
+      if (isDeleted) {
+        setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+        storeTasksToLocalStorage(tasks.filter((task) => task.id !== id));
+      }
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -76,13 +113,17 @@ const App = () => {
         <button className="add-button" onClick={handleAddTask}>
           Add
         </button>
+       
       </div>
+      {loading && <div className="waveform-container"><Waveform /></div>}
       <ToDoList
         tasks={tasks}
         onToggleComplete={handleTaskComplete}
         onDeleteTask={handleDeleteTask}
       />
+       
     </div>
   );
 };
+
 export default App;
