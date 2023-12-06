@@ -5,6 +5,7 @@ const ToDoList = ({ tasks, onToggleComplete, onDeleteTask }) => {
     <ul>
       {tasks.map((task, index) => (
         <li key={`${task.id}_${index}`}>
+          <div className="task-container">
           <input
           id={`${task.id}_${index}`}
             type="checkbox"
@@ -25,6 +26,7 @@ const ToDoList = ({ tasks, onToggleComplete, onDeleteTask }) => {
             >
               Delete
             </button>
+          </div>
           </div>
         </li>
       ))}

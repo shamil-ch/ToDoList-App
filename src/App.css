@@ -98,6 +98,11 @@ li.todo-item:last-child {
 
 .delete-container {
   text-align: right;
-  margin-top: auto;
-  margin-bottom: auto;
+  margin-top: -35px;
+  margin-bottom: 10px;
+}
+
+.task-container {
+display: inline;
+  align-items: center;
 }

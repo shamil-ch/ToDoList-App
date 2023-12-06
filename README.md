@@ -13,7 +13,7 @@ This is a simple To-Do List application built with React that allows you to mana
 
 2. Install dependencies:
 
-    cd <project-folder>
+    cd ToDo-List-App
 
     npm install
 
