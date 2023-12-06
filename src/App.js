@@ -41,7 +41,6 @@ const App = () => {
     };
     
     try {
-      // Simulating an asynchronous task (replace with actual API call)
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       setTasks((prevTasks) => [newTask, ...prevTasks]);
@@ -65,7 +64,6 @@ const App = () => {
       );
 
       try {
-        // Simulating an asynchronous task (replace with actual API call)
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
         setTasks(updatedTasks);
@@ -84,7 +82,6 @@ const App = () => {
     setLoading(true);
 
     try {
-      // Simulating an asynchronous task (replace with actual API call)
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const isDeleted = await deleteTask(id);
