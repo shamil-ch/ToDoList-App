@@ -8,23 +8,23 @@ const App = () => {
   const [newTaskTitle, setNewTaskTitle] = useState("");
 
   useEffect(() => {
-    const storedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
-    setTasks(storedTasks);
-  }, []);
-
-  useEffect(() => {
     const getTasks = async () => {
       const fetchedTasks = await fetchTasks();
       setTasks(fetchedTasks);
     };
 
-    getTasks();
+    const storedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+    if (storedTasks.length === 0) {
+      getTasks();
+    } else {
+      setTasks(storedTasks);
+    }
   }, []);
 
-  useEffect(() => {
-    console.log("Stored tasks from local storage:", tasks);
+  const storeTasksToLocalStorage = (tasks) => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
+  };
 
   const handleAddTask = async () => {
     if (!newTaskTitle) return;
@@ -37,6 +37,8 @@ const App = () => {
     setTasks((prevTasks) => [newTask, ...prevTasks]);
     setNewTaskTitle("");
     console.log(newTask);
+    const allTasks = [newTask, ...tasks];
+    storeTasksToLocalStorage(allTasks);
   };
 
   const handleTaskComplete = async (id) => {
@@ -48,6 +50,7 @@ const App = () => {
       );
       setTasks(updatedTasks);
       await updateTask(id, !taskToUpdate.completed);
+      storeTasksToLocalStorage(updatedTasks);
     }
   };
 
@@ -55,12 +58,13 @@ const App = () => {
     const isDeleted = await deleteTask(id);
     if (isDeleted) {
       setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+      storeTasksToLocalStorage(tasks.filter((task) => task.id !== id));
     }
   };
 
   return (
     <div className="container">
-      <h1>To-Do List</h1>
+      <h1 className="title">To-Do List</h1>
       <div className="input-container">
         <input
           className="new-task-input"

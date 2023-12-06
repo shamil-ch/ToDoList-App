@@ -16,12 +16,14 @@ const ToDoList = ({ tasks, onToggleComplete, onDeleteTask }) => {
           >
             {task.title}
           </span>
-          <button
-            className="delete-button"
-            onClick={() => onDeleteTask(task.id)}
-          >
-            Delete
-          </button>
+          <div className="delete-container">
+            <button
+              className="delete-button"
+              onClick={() => onDeleteTask(task.id)}
+            >
+              Delete
+            </button>
+          </div>
         </li>
       ))}
     </ul>
